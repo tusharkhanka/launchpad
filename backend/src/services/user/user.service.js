@@ -7,4 +7,9 @@ UserService.getAllUsers = async()=> {
     return response;
 }
 
+UserService.getById = async()=> {
+    const response = await userProvider.findOneById(userId);
+    return response;
+}
+
 module.exports = UserService;

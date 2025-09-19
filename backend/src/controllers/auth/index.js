@@ -5,13 +5,12 @@ const RequestWrapper = require('../../utils/requestWrapper');
 const validations = require('./auth.validation');
 const router = express.Router();
 
-// router.post(
-//   '/sso',
+router.post(
+  '/sso',
 //   validations.validateSSO(),
-//   ValidateRequestErrors(),
-//   RequestWrapper(AuthController.
-//   )
-// );
+  ValidateRequestErrors(),
+  RequestWrapper(AuthController.sso)
+);
 
 router.post(
     '/signup',

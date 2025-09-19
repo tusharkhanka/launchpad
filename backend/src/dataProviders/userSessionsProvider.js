@@ -7,7 +7,7 @@ const UserSessionDataProvider = {
         token: token,
         expiry: expiresAt
       });
-    return session.id; 
+    return session; 
   },
 
   findByToken: async (token) => {

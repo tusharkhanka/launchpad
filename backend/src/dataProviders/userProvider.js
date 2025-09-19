@@ -10,6 +10,9 @@ const UserDataProvider = {
       },
     findAll:async()=> {
         return User.findAll();
+    },
+    findOneById: async(userId)=> {
+      return User.findByPk(userId);
     }
       
 }

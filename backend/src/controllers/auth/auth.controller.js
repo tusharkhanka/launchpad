@@ -71,7 +71,29 @@ Authcontroller.logout = async (req, res) => {
             error
         );
     }
-};
+}
+
+Authcontroller.sso = async (req, res) => {
+    try {
+        const { token } = req.body;
+        const response = await AuthService.googleOAuth(token);
+
+        return responseWrapper.successResponse(
+            res,
+            200,
+            response,
+            "Successfully logged in with Google SSO"
+        );
+    } catch (error) {
+        return responseWrapper.errorResponse(
+            res,
+            500,
+            getErrorMessage(error) || respErrConstants.ERROR_500_MESSAGE,
+            error
+        );
+    }
+}
+
 
 
 module.exports = Authcontroller;
