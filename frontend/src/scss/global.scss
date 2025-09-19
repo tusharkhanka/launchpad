@@ -1,0 +1,21 @@
+@import "./variables.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  // font-family: 'DM Sans', sans-serif !important;
+  // font-family: "Work Sans", sans-serif !important;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+}
