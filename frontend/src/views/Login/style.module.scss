@@ -1,0 +1,51 @@
+@import "../../scss/variables.scss";
+
+.login {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $color-login-background;
+  padding: 50px 20px;
+}
+
+.login__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 360px;
+  padding: 50px 20px;
+  background: $color-white;
+  box-shadow: 0px 9px 20px rgba(0, 0, 0, 0.11);
+  border-radius: 20px;
+}
+
+.login__branding {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.login__form {}
+
+.login__google {
+//   margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px !important;
+
+  div {
+    padding: 6px !important;
+  }
+
+  span {
+    padding: 6px 6px 6px 0px !important;
+  }
+}
+
+.login__error {
+  margin-top: 20px;
+}
