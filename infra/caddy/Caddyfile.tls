@@ -1,0 +1,36 @@
+# Caddyfile for single-VM reverse proxy with TLS (production)
+# Requirements:
+# - A domain (e.g., app.example.com) with an A/AAAA DNS record pointing to this VM's public IP
+# - Set environment variables CADDY_DOMAIN and CADDY_EMAIL for ACME/Let's Encrypt
+# - This file enables HTTP->HTTPS redirection and automatic certificate management
+
+{
+    email {$CADDY_EMAIL}
+}
+
+# Redirect all HTTP to HTTPS for your domain
+:80 {
+    redir https://{$CADDY_DOMAIN}{uri} 308
+}
+
+# Primary site block with automatic HTTPS via Let's Encrypt
+{$CADDY_DOMAIN} {
+    encode gzip
+
+    @api path /api/* /health
+    handle @api {
+        reverse_proxy backend:9000
+    }
+
+    # All other routes go to the frontend (served by Nginx)
+    handle {
+        reverse_proxy frontend:80
+    }
+}
+
+# Notes:
+# - For local testing without a public domain, use infra/caddy/Caddyfile (HTTP only).
+# - If you must terminate TLS locally without a public domain, you may add inside the site block:
+#     tls internal
+#   and trust Caddy's local CA in your system. Use with care.
+

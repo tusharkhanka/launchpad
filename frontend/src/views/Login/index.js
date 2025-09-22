@@ -17,7 +17,7 @@ import { GOOGLE_CLIENT_ID } from '../../config/constants'
 import styles from "./style.module.scss";
 
 // Icons
-import ProboLogo from "../../assets/img/probo-logo.svg";
+import Logo from "../../assets/img/launchpad-logo.svg";
 
 const Login = ({ loginPayload = {} }) => {
   const { error, message, onSubmitForm, onSubmitGoogle, onSubmitGoogleFailed } = loginPayload;
@@ -28,7 +28,7 @@ const Login = ({ loginPayload = {} }) => {
     <div className={styles["login"]}>
       <div className={styles["login__wrapper"]}>
         <div className={styles["login__branding"]}>
-          <img src={ProboLogo} alt="Probo Logo" />
+          <img src={Logo} alt="Launchpad Logo" />
         </div>
 
         <div className={styles["login__form"]}>

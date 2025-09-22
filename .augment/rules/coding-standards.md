@@ -20,7 +20,7 @@ All contributors (human or AI) must follow these rules to ensure consistency, re
 ## 2. Languages & Frameworks
 - **Backend**: Node.js (TypeScript preferred)
 - **Frontend**: React (with TypeScript)
-- **Infrastructure/Deployment**: Helm charts + Kubernetes manifests + docker-compose
+- **Infrastructure/Deployment**: Helm charts + Kubernetes manifests + docker-compose + shell scripts
 
 ---
 
@@ -41,19 +41,11 @@ All contributors (human or AI) must follow these rules to ensure consistency, re
 - **Infra**:
   - Helm charts must be linted and templated before merging.
   - Config values must be parameterized, not hardcoded.
+- **Local setup**:
+  - local set up should be on the Docker compose.
+  - Config values must be parameterized, not hardcoded.
 
 ---
-
-## 4. Testing
-- **Unit Tests** required for all new modules.
-- **Integration Tests** where service interactions are involved.
-- **Testing Frameworks**:
-  - Jest (Frontend + Backend)
-  - Playwright/Cypress (E2E, if needed)
-- Minimum **coverage: 80%** per module.
-
----
-
 ## 5. Git & Commit Rules
 - Branch naming:
   - `feature/<module>-<short-desc>`

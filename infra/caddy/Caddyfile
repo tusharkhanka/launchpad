@@ -1,0 +1,19 @@
+# Default Caddyfile for single-VM reverse proxy (HTTP only by default)
+# - Proxies API traffic to backend (Express on port 9000)
+# - Proxies everything else to frontend (Nginx serving built React app on port 80)
+# - Suitable for local/dev. For TLS/production, see Caddyfile.tls in the same folder.
+
+:80 {
+    encode gzip
+
+    @api path /api/* /health
+    handle @api {
+        reverse_proxy backend:9000
+    }
+
+    # All other routes go to the frontend (served by Nginx)
+    handle {
+        reverse_proxy frontend:80
+    }
+}
+

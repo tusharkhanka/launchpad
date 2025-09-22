@@ -1,0 +1,11 @@
+apiVersion: v2
+name: launchpad
+version: 0.1.0
+description: Helm chart for Launchpad (frontend + backend + MySQL) with optional Ingress/TLS
+
+# This is a single chart that deploys all components. No external dependencies required.
+# Kubernetes: v1.19+
+
+type: application
+appVersion: "1.0.0"
+
