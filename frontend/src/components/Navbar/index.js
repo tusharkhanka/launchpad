@@ -9,7 +9,9 @@ import Typography from "@material-ui/core/Typography";
 
 import styles from "./style.module.scss";
 
-import Logo from "../../assets/img/launchpad-logo.svg";
+
+import Logo from "assets/img/Launchpad_logo_2.png";
+
 import Profile from "components/Profile";
 
 class Navbar extends React.Component {
@@ -30,7 +32,8 @@ class Navbar extends React.Component {
                     <MenuIcon />
                   </IconButton>
 
-                  <img className={styles["navbar__logo"]} src={Logo} alt="launchpad" />
+                  {/* <img className={styles["navbar__logo"]} src={Logo} alt="Probo" /> */}
+
 
                   <Typography variant="h6" style={{fontWeigh: 'bold'}} noWrap>
                     Launchpad

@@ -17,7 +17,9 @@ import { GOOGLE_CLIENT_ID } from '../../config/constants'
 import styles from "./style.module.scss";
 
 // Icons
-import Logo from "../../assets/img/launchpad-logo.svg";
+
+import Logo from "../../assets/img/Launchpad_logo_2.png";
+
 
 const Login = ({ loginPayload = {} }) => {
   const { error, message, onSubmitForm, onSubmitGoogle, onSubmitGoogleFailed } = loginPayload;
@@ -28,7 +30,10 @@ const Login = ({ loginPayload = {} }) => {
     <div className={styles["login"]}>
       <div className={styles["login__wrapper"]}>
         <div className={styles["login__branding"]}>
-          <img src={Logo} alt="Launchpad Logo" />
+
+          <h2>Launchpad</h2>
+          {/* <img src={Logo} alt="Launchpad Logo" /> */}
+
         </div>
 
         <div className={styles["login__form"]}>
@@ -80,7 +85,7 @@ const Login = ({ loginPayload = {} }) => {
                         onSuccess={onSubmitGoogle}
                         onError={() => console.log("Login Failed")}
                       />
-                      </div>
+                    </div>
                   </GoogleOAuthProvider>
                 </React.Fragment>
               );

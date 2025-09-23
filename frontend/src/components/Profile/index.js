@@ -19,31 +19,51 @@ const Profile = () => {
   const [userRole, setUserRole] = useState("");
   const [teamsList, setTeamsList] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     // Get user details from localStorage
     const userPayload = getUserPayload();
+    console.log("User payload:", userPayload); // Debug log
+    console.log("User image URL:", userPayload?.image); // Debug image URL
+    
     if (userPayload) {
+      // For testing - you can uncomment this line to test with a sample image
+      // userPayload.image = "https://via.placeholder.com/150/1da1f2/ffffff?text=U";
+      
+      // Convert Google image URL to proxied URL to avoid CORS issues
+      if (userPayload.image && userPayload.image.includes('googleusercontent.com')) {
+        const encodedImageUrl = encodeURIComponent(userPayload.image);
+        userPayload.image = `${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/api/auth/proxy-image?imageUrl=${encodedImageUrl}`;
+      }
+      
       setUserDetails(userPayload);
-      
-      // Mock teams data - replace with actual API call
-      const mockTeams = [
-        { id: 1, name: "Development Team", role: "Developer" },
-        { id: 2, name: "Design Team", role: "Designer" },
-        { id: 3, name: "Marketing Team", role: "Manager" },
-      ];
-      
-      setTeamsList(mockTeams);
-      
-      // Set default team and role
-      const defaultTeam = mockTeams[0];
-      setSelectedTeam(defaultTeam);
-      setUserRole(defaultTeam.role);
-      
-      // Store in localStorage
-      localStorage.setItem("team", JSON.stringify(defaultTeam));
-      localStorage.setItem("user_role", JSON.stringify(defaultTeam.role));
+      setImageError(false); // Reset image error state
+    } else {
+      // Set default user details if no payload exists
+      setUserDetails({
+        name: "User",
+        email: "user@example.com"
+      });
     }
+    
+    // Mock teams data - replace with actual API call
+    const mockTeams = [
+      { id: 1, name: "Development Team", role: "Developer" },
+      { id: 2, name: "Design Team", role: "Designer" },
+      { id: 3, name: "Marketing Team", role: "Manager" },
+    ];
+    
+    setTeamsList(mockTeams);
+    
+    // Set default team and role
+    const defaultTeam = mockTeams[0];
+    setSelectedTeam(defaultTeam);
+    setUserRole(defaultTeam.role);
+    
+    // Store in localStorage
+    localStorage.setItem("team", JSON.stringify(defaultTeam));
+    localStorage.setItem("user_role", JSON.stringify(defaultTeam.role));
   }, []);
 
   const handleProfileMenuOpen = (event) => {
@@ -114,8 +134,21 @@ const Profile = () => {
         color="inherit"
         className={styles["profile__avatar-button"]}
       >
-        <Avatar className={styles["profile__avatar"]}>
-          {userDetails?.name?.charAt(0) || <AccountCircle />}
+        <Avatar 
+          className={styles["profile__avatar"]}
+          src={userDetails?.image}
+          alt={userDetails?.name || "User"}
+          onError={(e) => {
+            console.log("Image failed to load due to CORS:", userDetails?.image);
+            setImageError(true);
+            // Hide the broken image and show fallback
+            e.target.style.display = 'none';
+          }}
+          onLoad={() => {
+            console.log("Image loaded successfully:", userDetails?.image);
+          }}
+        >
+          {(imageError || !userDetails?.image) && (userDetails?.name?.charAt(0)?.toUpperCase() || <AccountCircle />)}
         </Avatar>
       </IconButton>
 

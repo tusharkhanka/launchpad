@@ -77,7 +77,7 @@ AuthService.googleOAuth = async (token) => {
 
         const payload = verifyToken.getPayload();
         console.log("payload", payload);
-        const { given_name, family_name, email } = payload;
+        const { given_name, family_name, email, picture } = payload;
 
         // if (!this.isProboEmail(email)) {
         //   throw new Error("Please use valid email");
@@ -103,6 +103,7 @@ AuthService.googleOAuth = async (token) => {
             name: user?.username,
             email: user?.email,
             token: authToken.dataValues.token,
+            image: picture
         }
         return response;
     } catch (err) {
