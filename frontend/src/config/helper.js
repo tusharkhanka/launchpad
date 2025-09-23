@@ -17,23 +17,12 @@ export function clearTokens() {
 // User data management
 export function setUserPayload(user = {}) {
   console.log("user data in helper", user);
-  user?.name && setUserName(user?.name);
-  user?.email && setUserEmail(user?.email);
   setTokens(user?.token);
   
   localStorage.setItem("user_payload", JSON.stringify(user));
   return user;
 }
 
-// Set user full name
-export function setUserName(name) {
-  localStorage.setItem("user_full_name", name);
-}
-
-// Set user email
-export function setUserEmail(email) {
-  localStorage.setItem("user_email", email);
-}
 export function getUserPayload() {
   const userData = localStorage.getItem("user_payload");
   return userData ? JSON.parse(userData) : null;
@@ -41,14 +30,6 @@ export function getUserPayload() {
 
 export function resetUserPayload() {
   clearLocalStorage();
-}
-
-export function setUserImage(imageUrl) {
-  const user = getUserPayload();
-  if (user) {
-    user.avatar = imageUrl;
-    localStorage.setItem("user_payload", JSON.stringify(user));
-  }
 }
 
 // Complete localStorage cleanup
