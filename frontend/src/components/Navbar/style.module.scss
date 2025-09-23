@@ -1,0 +1,44 @@
+@import "scss/variables.scss";
+
+.navbar__appbar {
+  background-color: #3f7c6d !important;
+  color: #fff !important;
+  
+  // Override Material-UI AppBar default styles
+  &.MuiAppBar-root {
+    background-color: #3f7c6d !important;
+    color: #fff !important;
+  }
+}
+
+.navbar__branding {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.navbar__search-container {
+  flex-grow: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__logo {
+  max-width: 30px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.navbar__environment {
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 8px;
+  color: black;
+  background-color: #fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.navbar__profile {
+  // Profile specific styles can be added here
+}
