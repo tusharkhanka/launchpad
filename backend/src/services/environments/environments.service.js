@@ -27,7 +27,8 @@ const EnvironmentsService = {
     if (typeof region !== 'undefined') payload.region = region;
     if (typeof vpcId !== 'undefined') payload.vpc_id = vpcId;
     if (typeof metadata !== 'undefined') payload.metadata = metadata;
-    await provider.updateById(id, payload);
+    const affected = await provider.updateById(id, payload);
+    if (!affected) return null;
     return provider.findById(id);
   },
 

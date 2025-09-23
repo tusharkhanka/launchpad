@@ -20,7 +20,8 @@ const CloudAccountsService = {
     const payload = {};
     if (typeof accessRole !== 'undefined') payload.access_role = accessRole;
     if (typeof metadata !== 'undefined') payload.metadata = metadata;
-    await provider.updateById(id, payload);
+    const affected = await provider.updateById(id, payload);
+    if (!affected) return null;
     return provider.findById(id);
   },
 
