@@ -2,6 +2,9 @@ const provider = require('../../dataProviders/environmentsProvider');
 
 const EnvironmentsService = {
   createUnderOrg: async (orgId, { name, region, vpcId, cloudAccountId, metadata }) => {
+    if (typeof cloudAccountId === 'undefined' || cloudAccountId === null) {
+      throw new Error('cloudAccountId is required');
+    }
     const created = await provider.create({
       organisation_id: orgId,
       name,

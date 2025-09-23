@@ -1,11 +1,25 @@
 const { execSync } = require('child_process');
+const path = require('path');
 const request = require('supertest');
 
 function seedDevToken() {
-  const out = execSync('node scripts/seed-dev-session.js', { cwd: process.cwd(), encoding: 'utf8' });
-  // The script prints a JSON line first
+  const scriptPath = path.resolve(__dirname, '../../scripts/seed-dev-session.js');
+  let out;
+  try {
+    out = execSync(`node ${scriptPath}`, { encoding: 'utf8' });
+  } catch (err) {
+    throw new Error(`Failed to execute seed-dev-session script: ${err.message}`);
+  }
   const firstLine = out.split('\n').find((l) => l.trim().startsWith('{')) || '{}';
-  const parsed = JSON.parse(firstLine);
+  let parsed;
+  try {
+    parsed = JSON.parse(firstLine);
+  } catch (err) {
+    throw new Error(`Invalid JSON output from seed-dev-session script: ${firstLine}`);
+  }
+  if (!parsed.token) {
+    throw new Error(`Missing token in seed-dev-session output: ${firstLine}`);
+  }
   return parsed.token;
 }
 

@@ -36,7 +36,7 @@ describe('Environments API', () => {
   test('POST /organisations/:orgId/environments -> 201', async () => {
     const res = await api
       .post(`/api/v1/organisations/${orgId}/environments`)
-      .send({ name: 'staging', region: 'us-east-1', vpcId: 'vpc-abc', cloudAccountId: caId, metadata: { tier: 'stg' } });
+      .send({ name: 'staging', region: 'us-east-1', vpcId: 'vpc-1234abcd', cloudAccountId: caId, metadata: { tier: 'stg' } });
     expect(res.status).toBe(201);
     envId = res.body.data.id;
   });
@@ -67,11 +67,11 @@ describe('Environments API', () => {
     expect([p1.status, p2.status, p3.status]).toEqual([501, 501, 501]);
   });
 
-  test('POST environment with invalid cloudAccountId -> 500 (FK error)', async () => {
+  test('POST environment with invalid cloudAccountId -> 400 (FK validation)', async () => {
     const res = await api
       .post(`/api/v1/organisations/${orgId}/environments`)
       .send({ name: 'bad', cloudAccountId: '11111111-1111-1111-1111-111111111111' });
-    expect([400, 500]).toContain(res.status); // allow 400/500 depending on validation/DB
+    expect(res.status).toBe(400);
   });
 
   test('DELETE /environments/:id -> 204 then 404', async () => {

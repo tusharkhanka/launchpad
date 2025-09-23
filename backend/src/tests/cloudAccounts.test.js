@@ -17,7 +17,13 @@ describe('Cloud Accounts API', () => {
   });
 
   afterAll(async () => {
-    if (orgId) await api.delete(`/api/v1/organisations/${orgId}`);
+    // Clean up cloud accounts first to avoid FK constraints and ensure isolation
+    if (caId) {
+      try { await api.delete(`/api/v1/cloud-accounts/${caId}`); } catch (_) {}
+    }
+    if (orgId) {
+      try { await api.delete(`/api/v1/organisations/${orgId}`); } catch (_) {}
+    }
   });
 
   test('POST /organisations/:orgId/cloud-accounts -> 201', async () => {

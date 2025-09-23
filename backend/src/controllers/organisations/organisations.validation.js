@@ -10,8 +10,5 @@ module.exports = {
   ],
   byId: () => [
     param('id').isUUID()
-  ],
-  byOrgId: () => [
-    param('orgId').isUUID()
   ]
 };

@@ -14,6 +14,11 @@ Controller.createUnderOrg = async (req, res) => {
     const created = await Service.createUnderOrg(orgId, { name, region, vpcId, cloudAccountId, metadata });
     return responseWrapper.successResponse(res, 201, created);
   } catch (error) {
+    // Map FK constraint errors to 400 Bad Request for clearer client feedback
+    const code = error && error.parent && (error.parent.code || error.parent.sqlState || error.parent.errno);
+    if (code === 'ER_NO_REFERENCED_ROW_2' || code === 1452) {
+      return responseWrapper.errorResponse(res, 400, 'Invalid reference: cloudAccountId or orgId');
+    }
     return responseWrapper.errorResponse(
       res,
       500,

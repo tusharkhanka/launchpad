@@ -107,7 +107,7 @@ const components = {
       properties: {
         name: { type: "string" },
         region: { type: "string" },
-        vpcId: { type: "string" },
+        vpcId: { type: "string", pattern: "^vpc-[0-9a-f]{8,17}$" },
         cloudAccountId: { type: "string", format: "uuid" },
         metadata: { type: "object", additionalProperties: true },
       },
@@ -115,7 +115,7 @@ const components = {
       example: {
         name: "staging",
         region: "us-east-1",
-        vpcId: "vpc-0abc12345",
+        vpcId: "vpc-1234abcd",
         cloudAccountId: "33809269-212a-4e4e-afbb-0a7ea17069ef",
         metadata: { tier: "stg" },
       },
@@ -125,7 +125,7 @@ const components = {
       properties: {
         name: { type: "string" },
         region: { type: "string" },
-        vpcId: { type: "string" },
+        vpcId: { type: "string", pattern: "^vpc-[0-9a-f]{8,17}$" },
         metadata: { type: "object", additionalProperties: true },
       },
     },

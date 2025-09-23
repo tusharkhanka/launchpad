@@ -11,6 +11,9 @@ const CloudAccount = AppDataSource.define('cloud_account', {
   organisation_id: {
     type: DataTypes.UUID,
     allowNull: false,
+    references: { model: 'organisation', key: 'id' },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
   provider: {
     type: DataTypes.ENUM('aws', 'gcp', 'azure', 'oracle'),
