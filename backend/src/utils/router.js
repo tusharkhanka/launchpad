@@ -8,5 +8,11 @@ module.exports = function(app){
     app.use(`${apiPrefix}/auth`, require('../controllers/auth'))
     app.use(isUserAuthenticated())
     app.use(`${apiPrefix}/user`, require('../controllers/user'))
+    app.use(`${apiPrefix}/organisations`, require('../controllers/organisations'))
+    app.use(`${apiPrefix}/organisations`, require('../controllers/organisations/cloudAccounts'))
+    app.use(`${apiPrefix}/organisations`, require('../controllers/organisations/environments'))
+    app.use(`${apiPrefix}/cloud-accounts`, require('../controllers/cloudAccounts'))
+    app.use(`${apiPrefix}/environments`, require('../controllers/environments'))
+
 
 }
