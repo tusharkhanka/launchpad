@@ -5,6 +5,9 @@ module.exports = function(app){
         res.send("The app is up and running!")
     });
 
+    // Mount Swagger UI before auth to allow browsing docs
+    try { require('../utils/swagger')(app); } catch (e) { /* noop if swagger deps missing */ }
+
     app.use(`${apiPrefix}/auth`, require('../controllers/auth'))
     app.use(isUserAuthenticated())
     app.use(`${apiPrefix}/user`, require('../controllers/user'))
