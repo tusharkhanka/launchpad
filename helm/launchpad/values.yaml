@@ -1,0 +1,63 @@
+# Default values for Launchpad Helm chart.
+
+namespaceOverride: ""
+
+replicaCount:
+  backend: 1
+  frontend: 1
+  mysql: 1
+
+image:
+  backend:
+    repository: launchpad-backend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: launchpad-frontend
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  mysql:
+    repository: mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+
+service:
+  backend:
+    type: ClusterIP
+    port: 9000
+  frontend:
+    type: ClusterIP
+    port: 80
+  mysql:
+    type: ClusterIP
+    port: 3306
+
+mysql:
+  database: launchpad
+  username: launchpad
+  password: launchpad
+  rootPassword: root
+  persistence:
+    enabled: false
+    size: 5Gi
+    storageClassName: ""
+
+backend:
+  env:
+    JWT_SECRET: "change-me"
+    GOOGLE_CLIENT_ID: "change-me"
+  resources: {}
+
+frontend:
+  env: {}
+  resources: {}
+
+ingress:
+  enabled: false
+  className: "nginx"
+  host: "app.local"
+  annotations: {}
+  tls:
+    enabled: false
+    secretName: ""
+

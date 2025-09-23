@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "launchpad.fullname" . }}-backend
+  labels:
+    {{- include "launchpad.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.backend.type }}
+  selector:
+    app: {{ include "launchpad.fullname" . }}-backend
+  ports:
+    - name: http
+      port: {{ .Values.service.backend.port }}
+      targetPort: 9000
+

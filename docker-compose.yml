@@ -1,0 +1,71 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: lp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-launchpad}
+      MYSQL_USER: ${MYSQL_USER:-launchpad}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-launchpad}
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      PORT: ${PORT:-9000}
+      DB_MASTER_HOST: ${DB_MASTER_HOST:-lp-mysql}
+      DB_READER_HOST: ${DB_READER_HOST:-lp-mysql}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_USERNAME: ${DB_USERNAME:-launchpad}
+      DB_PASSWORD: ${DB_PASSWORD:-launchpad}
+      DB_NAME: ${DB_NAME:-launchpad}
+      DB_LOGGING: ${DB_LOGGING:-"false"}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-change-me}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "9000:9000"
+
+  frontend:
+    build:
+      context: .
+
+      dockerfile: frontend/Dockerfile
+    environment:
+      - REACT_APP_ENV=${REACT_APP_ENV:-development}
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  reverse-proxy:
+    image: caddy:2.8-alpine
+    container_name: lp-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      CADDY_DOMAIN: ${CADDY_DOMAIN:-localhost}
+      CADDY_EMAIL: ${CADDY_EMAIL:-admin@example.com}
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  caddy_data:
+  caddy_config:

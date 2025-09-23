@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  backend:
+    # Remove direct host exposure in production
+    ports: []
+    environment:
+      PORT: ${PORT:-9000}
+      DB_MASTER_HOST: ${DB_MASTER_HOST:-lp-mysql}
+      DB_READER_HOST: ${DB_READER_HOST:-lp-mysql}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_USERNAME: ${DB_USERNAME:-launchpad}
+      DB_PASSWORD: ${DB_PASSWORD:-launchpad}
+      DB_NAME: ${DB_NAME:-launchpad}
+      DB_LOGGING: ${DB_LOGGING:-"false"}
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-change-me}
+
+  frontend:
+    # Remove direct host exposure in production and set prod env
+    ports: []
+    environment:
+      - REACT_APP_ENV=${REACT_APP_ENV:-production}
+
+  reverse-proxy:
+    # Only expose the proxy in production (same as base file)
+    # No overrides needed unless you want to customize Caddy envs
+
+# No changes to mysql ports: it is not exposed in base file either (Cluster-internal only)
+
