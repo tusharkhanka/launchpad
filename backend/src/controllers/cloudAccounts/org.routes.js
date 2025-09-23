@@ -1,25 +1,23 @@
 const express = require('express');
 const ValidateRequestErrors = require('../../utils/validateRequestMiddlewares');
 const RequestWrapper = require('../../utils/requestWrapper');
-const responseWrapper = require('../../utils/responseWrapper');
 const validations = require('./cloudAccounts.validation');
+const Controller = require('./cloudAccounts.controller');
 
 const router = express.Router();
-
-const notImpl = (req, res) => responseWrapper.errorResponse(res, 501, 'Not implemented', {});
 
 router.post(
   '/:orgId/cloud-accounts',
   validations.createUnderOrg(),
   ValidateRequestErrors(),
-  RequestWrapper(notImpl)
+  RequestWrapper(Controller.createUnderOrg)
 );
 
 router.get(
   '/:orgId/cloud-accounts',
   validations.listUnderOrg(),
   ValidateRequestErrors(),
-  RequestWrapper(notImpl)
+  RequestWrapper(Controller.listUnderOrg)
 );
 
 module.exports = router;
