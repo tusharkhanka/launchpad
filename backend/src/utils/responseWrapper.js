@@ -19,7 +19,7 @@ const responseWrapper = {
       throw new Error(respWrapperErrConstants.DATA_MISSING);
     }
 
-    return res.json({
+    return res.status(statusCode).json({
       data,
       message: message || respWrapperSuccessConstants.SUCCESS,
       statusCode,
