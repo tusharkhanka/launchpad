@@ -12,7 +12,7 @@ const CloudAccount = AppDataSource.define('cloud_account', {
     type: DataTypes.UUID,
     allowNull: false,
     references: { model: 'organisation', key: 'id' },
-    onDelete: 'CASCADE',
+    onDelete: 'RESTRICT',
     onUpdate: 'CASCADE',
   },
   provider: {
