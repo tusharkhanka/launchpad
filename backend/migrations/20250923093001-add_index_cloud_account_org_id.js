@@ -4,6 +4,7 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.addIndex('cloud_account', ['organisation_id'], {
       name: 'idx_cloud_account_organisation_id',
+      using: 'BTREE',
     });
   },
 
