@@ -68,6 +68,9 @@ Controller.update = async (req, res) => {
     if (!existing) {
       return responseWrapper.errorResponse(res, 404, 'Cloud account not found');
     }
+    if (typeof req.body.accessRole === 'undefined' && typeof req.body.metadata === 'undefined') {
+      return responseWrapper.errorResponse(res, 400, 'At least one of accessRole or metadata must be provided');
+    }
     const updated = await Service.update(id, { accessRole: req.body.accessRole, metadata: req.body.metadata });
     return responseWrapper.successResponse(res, 200, updated);
   } catch (error) {
