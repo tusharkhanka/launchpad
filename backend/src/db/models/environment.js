@@ -11,10 +11,16 @@ const Environment = AppDataSource.define('environment', {
   organisation_id: {
     type: DataTypes.UUID,
     allowNull: false,
+    references: { model: 'organisation', key: 'id' },
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   },
   cloud_account_id: {
     type: DataTypes.UUID,
     allowNull: false,
+    references: { model: 'cloud_account', key: 'id' },
+    onUpdate: 'CASCADE',
+    onDelete: 'RESTRICT',
   },
   name: {
     type: DataTypes.STRING(255),
