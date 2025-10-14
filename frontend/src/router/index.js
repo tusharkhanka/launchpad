@@ -8,10 +8,17 @@ import Login from "../views/Login";
 import Home from "../views/Home";
 import AdminPanel from "../views/AdminPanel";
 import Teams from "../views/Teams";
+import TeamDetails from "../views/Teams/TeamDetails";
+import RolesManagement from "../views/Teams/RolesManagement";
+import Applications from "../views/Applications";
+import ApplicationDetails from "../views/Applications/ApplicationDetails";
+import EnvironmentSecrets from "../views/Applications/EnvironmentSecrets";
+import AuditLogs from "../views/AuditLogs";
 import AppLayout from "../components/AppLayout";
 
 import LoginContainer from "../containers/auth/LoginContainer";
 
+// Define all routes in a map
 const routes = [
     {
         name: "home",
@@ -31,7 +38,46 @@ const routes = [
         path: "/teams",
         component: Teams,
     },
-]
+    {
+        name: "rolesManagement",
+        exact: true,
+        path: "/teams/roles",
+        component: RolesManagement,
+    },
+    {
+        name: "teamDetails",
+        exact: true,
+        path: "/teams/:teamId",
+        component: TeamDetails,
+    },
+    {
+        name: "applications",
+        exact: true,
+        path: "/applications",
+        component: Applications,
+    },
+    {
+        name: "applicationDetails",
+        exact: true,
+        path: "/applications/:applicationName",
+        component: ApplicationDetails,
+    },
+    {
+        name: "environmentSecrets",
+        exact: true,
+        path: "/applications/:applicationName/environments/:environmentName",
+        component: EnvironmentSecrets,
+    },
+    {
+        name: "auditLogs",
+        exact: true,
+        path: "/audit-logs",
+        component: AuditLogs,
+    },
+];
+
+// Create a map of route paths for easier management
+const routePaths = routes.map(route => route.path);
 
 const AppRoutes = (props) => {
     const userPayload = getUserPayload();
@@ -57,7 +103,6 @@ const AppRoutes = (props) => {
     );
 };
 
-
 const AppRouter = () => {
     console.log("reached in router")
     return (
@@ -73,12 +118,14 @@ const AppRouter = () => {
                             </LoginContainer>
                         )}
                     />
-                    {/* 
-                    Protected Home Route
-                    <ProtectedRoute exact path="/" component={Home} /> */}
-                    <Route path="/home" component={AppRoutes} />
+                    
+                    {/* Dynamically render all protected routes */}
+                    {routePaths.map((path, index) => (
+                        <Route key={index} path={path} component={AppRoutes} />
+                    ))}
 
                     {/* Catch-all redirect */}
+                    <Route path="/" exact component={() => <Redirect to="/home" />} />
                 </Switch>
             // </Router>
         // </AuthProvider>

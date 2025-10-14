@@ -20,6 +20,49 @@ export const SSO_URL = `${BASE_URL}/auth/sso`;
 export const LOGOUT_URL = `${BASE_URL}/auth/logout`;
 export const VERIFY_TOKEN_URL = `${BASE_URL}/auth/verify`;
 
+// Organizations URLs
+export const ORGANIZATIONS_URL = `${BASE_URL}/organisations`;
+export const ORGANIZATION_BY_ID_URL = (id) => `${BASE_URL}/organisations/${id}`;
+
+// Cloud Accounts URLs
+export const CLOUD_ACCOUNTS_URL = (orgId) => `${BASE_URL}/organisations/${orgId}/cloud-accounts`;
+export const CLOUD_ACCOUNT_BY_ID_URL = (id) => `${BASE_URL}/cloud-accounts/${id}`;
+
+// Environments URLs
+export const ENVIRONMENTS_URL = (orgId) => `${BASE_URL}/organisations/${orgId}/environments`;
+export const ENVIRONMENT_BY_ID_URL = (id) => `${BASE_URL}/environments/${id}`;
+export const ENVIRONMENT_PROVISION_URL = (id) => `${BASE_URL}/environments/${id}/provision`;
+export const ENVIRONMENT_DESTROY_URL = (id) => `${BASE_URL}/environments/${id}/destroy`;
+export const ENVIRONMENT_STATUS_URL = (id) => `${BASE_URL}/environments/${id}/status`;
+
+// Applications URLs
+export const APPLICATIONS_URL = `${BASE_URL}/applications`;
+export const APPLICATION_BY_ID_URL = (id) => `${BASE_URL}/applications/${id}`;
+export const APPLICATION_SECRETS_URL = (appName, envName) => `${BASE_URL}/applications/${appName}/environments/${envName}/secrets`;
+export const APPLICATION_TAGS_URL = (appName, envName) => `${BASE_URL}/applications/${appName}/environments/${envName}/tags`;
+
+// Teams URLs
+export const TEAMS_URL = `${BASE_URL}/teams`;
+export const TEAM_BY_ID_URL = (id) => `${BASE_URL}/teams/${id}`;
+export const TEAM_MEMBERS_URL = (teamId) => `${BASE_URL}/teams/${teamId}/members`;
+export const TEAM_MEMBER_BY_ID_URL = (teamId, userId) => `${BASE_URL}/teams/${teamId}/members/${userId}`;
+
+// Roles URLs
+export const ROLES_URL = `${BASE_URL}/roles`;
+export const ROLE_BY_ID_URL = (id) => `${BASE_URL}/roles/${id}`;
+
+// Users URLs
+export const USERS_URL = `${BASE_URL}/user`;
+export const USER_SEARCH_URL = `${BASE_URL}/user/search`;
+export const USER_TEAMS_AND_ROLES_URL = `${BASE_URL}/user/teams-and-roles`;
+
+// Audit Logs URLs
+export const AUDIT_LOGS_URL = `${BASE_URL}/auditlogs`;
+export const AUDIT_LOGS_BY_USER_URL = (userId) => `${BASE_URL}/auditlogs/user/${userId}`;
+export const AUDIT_LOGS_BY_ENTITY_URL = (entity) => `${BASE_URL}/auditlogs/entity/${entity}`;
+export const AUDIT_LOGS_BY_ACTION_URL = (action) => `${BASE_URL}/auditlogs/action/${action}`;
+export const AUDIT_LOGS_BY_STATUS_URL = (status) => `${BASE_URL}/auditlogs/status/${status}`;
+
 /**
  * Default headers
  */

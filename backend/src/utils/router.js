@@ -11,13 +11,21 @@ module.exports = function(app){
     app.use(`${apiPrefix}/auth`, require('../controllers/auth'))
     app.use(isUserAuthenticated())
     app.use(`${apiPrefix}/user`, require('../controllers/user'))
-    // Mount nested organisation-scoped routes BEFORE generic organisations CRUD to avoid shadowing
-    app.use(`${apiPrefix}/organisations`, require('../controllers/cloudAccounts/org.routes'))
-    app.use(`${apiPrefix}/organisations`, require('../controllers/environments/org.routes'))
+    app.use(`${apiPrefix}/teams`, require('../controllers/teams'))
+    app.use(`${apiPrefix}/roles`, require('../controllers/roles'))
+    app.use(`${apiPrefix}/applications`, require('../controllers/applications'))
+    // Mount organisation routes with specific path patterns to avoid route shadowing
     app.use(`${apiPrefix}/organisations`, require('../controllers/organisations'))
-    // Top-level resource routes
     app.use(`${apiPrefix}/cloud-accounts`, require('../controllers/cloudAccounts'))
     app.use(`${apiPrefix}/environments`, require('../controllers/environments'))
+    app.use(`${apiPrefix}/auditlogs`, require('../controllers/auditTrail'))
+    // Mount nested routes using mergeParams
+    const cloudAccountsRouter = require('../controllers/cloudAccounts/org.routes');
+    const environmentsRouter = require('../controllers/environments/org.routes');
+    
+    app.use(`${apiPrefix}/organisations/:orgId/cloud-accounts`, cloudAccountsRouter);
+    app.use(`${apiPrefix}/organisations/:orgId/environments`, environmentsRouter);
+ 
 
 
 }

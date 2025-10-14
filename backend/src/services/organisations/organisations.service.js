@@ -8,6 +8,9 @@ const OrgService = {
   getById: async (id) => {
     return orgProvider.findById(id);
   },
+  list: async () => {
+    return orgProvider.findAll();
+  },
   update: async (id, { name }) => {
     const affected = await orgProvider.updateById(id, { name });
     if (!affected) return null;

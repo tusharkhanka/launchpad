@@ -1,53 +1,71 @@
 const express = require('express');
+const EnvironmentController = require('./environment.controller');
 const ValidateRequestErrors = require('../../utils/validateRequestMiddlewares');
 const RequestWrapper = require('../../utils/requestWrapper');
-const validations = require('./environments.validation');
-const Controller = require('./environments.controller');
+const validations = require('./environment.validation');
 
 const router = express.Router();
 
+// Create environment
+router.post(
+  '/',
+  validations.createEnvironment(),
+  ValidateRequestErrors(),
+  RequestWrapper(EnvironmentController.create)
+);
+
+// List all environments
+router.get(
+  '/',
+  RequestWrapper(EnvironmentController.list)
+);
+
+// List environments by organisation
+router.get(
+  '/organisation/:orgId',
+  validations.listByOrganisation(),
+  ValidateRequestErrors(),
+  RequestWrapper(EnvironmentController.listByOrganisation)
+);
+
+// List environments by cloud account
+router.get(
+  '/cloud-account/:cloudAccountId',
+  validations.listByCloudAccount(),
+  ValidateRequestErrors(),
+  RequestWrapper(EnvironmentController.listByCloudAccount)
+);
+
+// Get environment by ID
 router.get(
   '/:id',
   validations.byId(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.getById)
+  RequestWrapper(EnvironmentController.getById)
 );
 
+// Update environment
 router.put(
   '/:id',
   validations.updateEnvironment(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.update)
+  RequestWrapper(EnvironmentController.update)
 );
 
+// Delete environment
 router.delete(
   '/:id',
   validations.byId(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.remove)
+  RequestWrapper(EnvironmentController.remove)
 );
 
-// Operational endpoints (provision/destroy/status)
-router.post(
-  '/:id/provision',
-  validations.byId(),
-  ValidateRequestErrors(),
-  RequestWrapper(Controller.provision)
-);
-
-router.post(
-  '/:id/destroy',
-  validations.byId(),
-  ValidateRequestErrors(),
-  RequestWrapper(Controller.destroy)
-);
-
+// Get environment stats for organisation
 router.get(
-  '/:id/status',
-  validations.byId(),
+  '/stats/:orgId',
+  validations.getStats(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.status)
+  RequestWrapper(EnvironmentController.getStats)
 );
 
 module.exports = router;
-

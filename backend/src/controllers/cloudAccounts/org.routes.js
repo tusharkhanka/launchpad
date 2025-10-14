@@ -1,24 +1,25 @@
 const express = require('express');
+const CloudAccountController = require('./cloudAccount.controller');
 const ValidateRequestErrors = require('../../utils/validateRequestMiddlewares');
 const RequestWrapper = require('../../utils/requestWrapper');
-const validations = require('./cloudAccounts.validation');
-const Controller = require('./cloudAccounts.controller');
+const validations = require('./cloudAccount.validation');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
+// Create cloud account under organisation
 router.post(
-  '/:orgId/cloud-accounts',
+  '/',
   validations.createUnderOrg(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.createUnderOrg)
+  RequestWrapper(CloudAccountController.create)
 );
 
+// List cloud accounts for organisation
 router.get(
-  '/:orgId/cloud-accounts',
-  validations.listUnderOrg(),
+  '/',
+  validations.listByOrganisation(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.listUnderOrg)
+  RequestWrapper(CloudAccountController.listByOrganisation)
 );
 
 module.exports = router;
-

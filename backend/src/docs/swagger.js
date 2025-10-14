@@ -52,80 +52,77 @@ const components = {
       type: "object",
       properties: {
         id: { type: "string", format: "uuid" },
-        organisation_id: { type: "string", format: "uuid" },
         provider: { type: "string", enum: ["aws", "gcp", "azure", "oracle"] },
+        account_name: { type: "string" },
         account_identifier: { type: "string" },
-        access_role: { type: "string" },
-        metadata: { type: "object", additionalProperties: true },
+        organisation_id: { type: "string", format: "uuid" },
+        access_keys: { 
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              key: { type: "string" },
+              value: { type: "string" }
+            },
+            required: ["key", "value"]
+          }
+        },
+        metadata: { type: "object", additionalProperties: true, nullable: true },
         createdAt: { type: "string", format: "date-time" },
         updatedAt: { type: "string", format: "date-time" },
       },
-      required: ["id", "organisation_id", "provider", "account_identifier"],
+      required: ["id", "provider", "account_name", "account_identifier", "organisation_id", "access_keys"],
     },
     CreateCloudAccountRequest: {
       type: "object",
       properties: {
         provider: { type: "string", enum: ["aws", "gcp", "azure", "oracle"] },
-        accountIdentifier: { type: "string" },
-        accessRole: { type: "string" },
+        account_name: { type: "string" },
+        account_identifier: { type: "string" },
+        organisation_id: { type: "string", format: "uuid" },
+        access_keys: { 
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              key: { type: "string" },
+              value: { type: "string" }
+            },
+            required: ["key", "value"]
+          }
+        },
         metadata: { type: "object", additionalProperties: true },
       },
-      required: ["provider", "accountIdentifier", "accessRole"],
+      required: ["provider", "account_name", "account_identifier", "organisation_id", "access_keys"],
       example: {
         provider: "aws",
-        accountIdentifier: "123456789012",
-        accessRole: "arn:aws:iam::123456789012:role/LaunchpadAccessRole",
-        metadata: { env: "dev" },
+        account_name: "Production AWS Account",
+        account_identifier: "123456789012",
+        organisation_id: "33809269-212a-4e4e-afbb-0a7ea17069ef",
+        access_keys: [
+          { key: "access_key_id", value: "AKIAIOSFODNN7EXAMPLE" },
+          { key: "secret_access_key", value: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" }
+        ],
+        metadata: { region: "us-east-1", environment: "production" },
       },
     },
     UpdateCloudAccountRequest: {
       type: "object",
       properties: {
-        accessRole: { type: "string" },
-        metadata: { type: "object", additionalProperties: true },
-      },
-      example: { accessRole: "arn:aws:iam::123456789012:role/NewRole" },
-    },
-    Environment: {
-      type: "object",
-      properties: {
-        id: { type: "string", format: "uuid" },
-        organisation_id: { type: "string", format: "uuid" },
-        cloud_account_id: { type: "string", format: "uuid" },
-        name: { type: "string" },
-        vpc_id: { type: "string", nullable: true },
-        region: { type: "string", nullable: true },
-        state: { type: "string", enum: ["CREATING", "ACTIVE", "UPDATING", "FAILED", "DELETING"] },
-        metadata: { type: "object", additionalProperties: true },
-        createdAt: { type: "string", format: "date-time" },
-        updatedAt: { type: "string", format: "date-time" },
-      },
-      required: ["id", "organisation_id", "cloud_account_id", "name"],
-    },
-    CreateEnvironmentRequest: {
-      type: "object",
-      properties: {
-        name: { type: "string" },
-        region: { type: "string" },
-        vpcId: { type: "string", pattern: "^vpc-[0-9a-f]{8,17}$" },
-        cloudAccountId: { type: "string", format: "uuid" },
-        metadata: { type: "object", additionalProperties: true },
-      },
-      required: ["name", "cloudAccountId"],
-      example: {
-        name: "staging",
-        region: "us-east-1",
-        vpcId: "vpc-1234abcd",
-        cloudAccountId: "33809269-212a-4e4e-afbb-0a7ea17069ef",
-        metadata: { tier: "stg" },
-      },
-    },
-    UpdateEnvironmentRequest: {
-      type: "object",
-      properties: {
-        name: { type: "string" },
-        region: { type: "string" },
-        vpcId: { type: "string", pattern: "^vpc-[0-9a-f]{8,17}$" },
+        provider: { type: "string", enum: ["aws", "gcp", "azure", "oracle"] },
+        account_name: { type: "string" },
+        account_identifier: { type: "string" },
+        access_keys: { 
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              key: { type: "string" },
+              value: { type: "string" }
+            },
+            required: ["key", "value"]
+          }
+        },
         metadata: { type: "object", additionalProperties: true },
       },
     },
@@ -187,14 +184,29 @@ const cloudAccountPaths = {
       summary: "Create cloud account under organisation",
       parameters: [{ name: "orgId", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
       requestBody: { required: true, content: { "application/json": { schema: { $ref: "#/components/schemas/CreateCloudAccountRequest" } } } },
-      responses: { 201: { description: "Created" }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
+      responses: { 201: { description: "Created", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
     },
     get: {
       tags: ["Cloud Accounts"],
       security: [{ bearerAuth: [] }],
       summary: "List cloud accounts for organisation",
       parameters: [{ name: "orgId", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 200: { description: "OK" }, 401: responses.Unauthorized, 404: responses.NotFound },
+      responses: { 200: { description: "OK", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 401: responses.Unauthorized, 404: responses.NotFound },
+    },
+  },
+  "/api/v1/cloud-accounts": {
+    get: {
+      tags: ["Cloud Accounts"],
+      security: [{ bearerAuth: [] }],
+      summary: "List all cloud accounts",
+      responses: { 200: { description: "OK", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 401: responses.Unauthorized },
+    },
+    post: {
+      tags: ["Cloud Accounts"],
+      security: [{ bearerAuth: [] }],
+      summary: "Create cloud account",
+      requestBody: { required: true, content: { "application/json": { schema: { $ref: "#/components/schemas/CreateCloudAccountRequest" } } } },
+      responses: { 201: { description: "Created", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 400: responses.BadRequest, 401: responses.Unauthorized },
     },
   },
   "/api/v1/cloud-accounts/{id}": {
@@ -203,7 +215,7 @@ const cloudAccountPaths = {
       security: [{ bearerAuth: [] }],
       summary: "Get cloud account by id",
       parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 200: { description: "OK" }, 401: responses.Unauthorized, 404: responses.NotFound },
+      responses: { 200: { description: "OK", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 401: responses.Unauthorized, 404: responses.NotFound },
     },
     put: {
       tags: ["Cloud Accounts"],
@@ -211,7 +223,7 @@ const cloudAccountPaths = {
       summary: "Update cloud account",
       parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
       requestBody: { required: true, content: { "application/json": { schema: { $ref: "#/components/schemas/UpdateCloudAccountRequest" } } } },
-      responses: { 200: { description: "OK" }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
+      responses: { 200: { description: "OK", content: { "application/json": { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } } }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
     },
     delete: {
       tags: ["Cloud Accounts"],
@@ -223,93 +235,20 @@ const cloudAccountPaths = {
   },
 };
 
-const environmentPaths = {
-  "/api/v1/organisations/{orgId}/environments": {
-    post: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Create environment under organisation",
-      parameters: [{ name: "orgId", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      requestBody: { required: true, content: { "application/json": { schema: { $ref: "#/components/schemas/CreateEnvironmentRequest" } } } },
-      responses: { 201: { description: "Created" }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-    get: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "List environments for organisation",
-      parameters: [{ name: "orgId", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 200: { description: "OK" }, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-  },
-  "/api/v1/environments/{id}": {
-    get: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Get environment by id",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 200: { description: "OK" }, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-    put: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Update environment",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      requestBody: { required: true, content: { "application/json": { schema: { $ref: "#/components/schemas/UpdateEnvironmentRequest" } } } },
-      responses: { 200: { description: "OK" }, 400: responses.BadRequest, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-    delete: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Delete environment",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 204: responses.NoContent, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-  },
-  "/api/v1/environments/{id}/provision": {
-    post: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Provision environment (stub)",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 501: { description: "Not Implemented" }, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-  },
-  "/api/v1/environments/{id}/destroy": {
-    post: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Destroy environment (stub)",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 501: { description: "Not Implemented" }, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-  },
-  "/api/v1/environments/{id}/status": {
-    get: {
-      tags: ["Environments"],
-      security: [{ bearerAuth: [] }],
-      summary: "Get environment status (stub)",
-      parameters: [{ name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } }],
-      responses: { 501: { description: "Not Implemented" }, 401: responses.Unauthorized, 404: responses.NotFound },
-    },
-  },
-};
-
-const paths = { ...orgPaths, ...cloudAccountPaths, ...environmentPaths };
+const paths = { ...orgPaths, ...cloudAccountPaths };
 
 module.exports = {
   openapi: "3.0.3",
   info: {
     title: "Launchpad Organization Service API",
     version: "1.0.0",
-    description: "OpenAPI spec for Organisations, Cloud Accounts, and Environments",
+    description: "OpenAPI spec for Organisations and Cloud Accounts",
   },
   servers,
   tags: [
     { name: "Organisations" },
     { name: "Cloud Accounts" },
-    { name: "Environments" },
   ],
   components,
   paths,
 };
-

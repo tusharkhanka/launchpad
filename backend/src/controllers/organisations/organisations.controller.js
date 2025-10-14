@@ -10,8 +10,24 @@ const OrgController = {};
 OrgController.create = async (req, res) => {
   try {
     const { name } = req.body;
+    console.log("name of organisation", name);
     const created = await OrgService.create({ name });
     return responseWrapper.successResponse(res, 201, created);
+  } catch (error) {
+    return responseWrapper.errorResponse(
+      res,
+      500,
+      getErrorMessage(error) || respErrConstants.ERROR_500_MESSAGE,
+      error
+    );
+  }
+};
+
+OrgController.list = async (req, res) => {
+  try {
+    console.log("list organisations");
+    const orgs = await OrgService.list();
+    return responseWrapper.successResponse(res, 200, orgs);
   } catch (error) {
     return responseWrapper.errorResponse(
       res,

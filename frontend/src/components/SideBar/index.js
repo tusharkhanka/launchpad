@@ -11,6 +11,8 @@ import { Tooltip } from "@material-ui/core";
 import DashboardIcon from "@material-ui/icons/Home";
 import AdminPanelIcon from "@material-ui/icons/Settings";
 import GroupIcon from "@material-ui/icons/Group";
+import AppsIcon from "@material-ui/icons/Apps";
+import HistoryIcon from "@material-ui/icons/History";
 
 import { AppContext } from "config/context";
 import { sideBarWidth } from "config/constants";
@@ -36,12 +38,24 @@ const sideBarContainers = [
     to: "/teams",
     icon: <GroupIcon />,
   },
+  {
+    id: "applications",
+    name: "Applications",
+    to: "/applications",
+    icon: <AppsIcon />,
+  },
+  {
+    id: "auditLogs",
+    name: "Audit Logs",
+    to: "/audit-logs",
+    icon: <HistoryIcon />,
+  },
 ];
 
 const drawerWidth = sideBarWidth;
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [activeLink, setActiveLink] = useState();
 
   const handleDrawerOpen = () => {

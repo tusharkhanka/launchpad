@@ -1,0 +1,43 @@
+@import "scss/variables.scss";
+
+.onboarding-modal {
+  .MuiDialog-paper {
+    border-radius: 12px;
+    max-height: 90vh;
+  }
+}
+
+.onboarding-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.onboarding-modal__title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.onboarding-modal__close {
+  color: #666;
+  text-transform: none;
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.onboarding-modal__content {
+  padding: 24px;
+}
+
+.onboarding-modal__stepper {
+  margin-bottom: 32px;
+}
+
+.onboarding-modal__step-content {
+  min-height: 400px;
+}

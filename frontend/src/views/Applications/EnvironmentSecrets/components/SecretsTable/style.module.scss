@@ -1,0 +1,366 @@
+.secretsTable {
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 18px;
+  color: #666;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.searchField {
+  min-width: 300px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.baseTagIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #666;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.indicatorIcon {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.indicatorText {
+  font-weight: 500;
+  color: #495057;
+}
+
+.columnNavigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.columnInfo {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  min-width: 80px;
+  text-align: center;
+}
+
+.tableContainer {
+  max-height: 60vh;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  
+  /* Ensure horizontal scrolling for many columns */
+  overflow-x: auto;
+  overflow-y: auto;
+  min-width: 100%;
+  width: 100%;
+  
+  /* Limit visible columns to 5 (1 key + 4 tags) */
+  .MuiTable-root {
+    min-width: 1000px; /* Increased minimum width for better horizontal scroll */
+    table-layout: fixed; /* Fixed layout for consistent column widths */
+  }
+  
+  /* Make key column sticky */
+  .MuiTableCell-head:first-child,
+  .MuiTableCell-root:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #f5f5f5;
+    z-index: 1;
+    border-right: 2px solid #e0e0e0;
+    min-width: 150px; /* Fixed width for key column */
+    max-width: 150px;
+  }
+  
+  .MuiTableCell-root:first-child {
+    background-color: white;
+  }
+  
+  /* Fixed width for tag columns - limit to 4 visible columns */
+  .MuiTableCell-head:not(:first-child),
+  .MuiTableCell-root:not(:first-child) {
+    min-width: 200px;
+    max-width: 200px;
+    overflow: hidden;
+  }
+  
+  /* Columns will be controlled by JavaScript state */
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 10px 0;
+  border-top: 1px solid #e0e0e0;
+  
+  .MuiTablePagination-root {
+    border: none;
+  }
+}
+
+.selectedRow {
+  background-color: #e0f2f7 !important;
+}
+
+.keyCell {
+  font-weight: 500;
+  background-color: #f5f5f5;
+}
+
+.keyText {
+  margin-left: 8px;
+}
+
+.valueCell {
+  position: relative;
+}
+
+.cellContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 0;
+}
+
+.valueText {
+  flex: 1;
+  word-break: break-word;
+  word-wrap: break-word;
+  font-family: 'monospace';
+  font-size: 13px;
+  max-width: 200px;
+  overflow-wrap: break-word;
+  
+  /* Hide overflow and show ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+  max-height: 1.2em;
+}
+
+.overwritten-cell {
+  background-color: #fffbe6 !important;
+  border-left: 3px solid #ffc107 !important;
+  position: relative;
+
+  &::after {
+    content: '🔻';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+    color: #d97706;
+  }
+}
+
+.overwritten-missing-cell {
+  background-color: #ffe6e6 !important;
+  border-left: 3px solid #dc3545 !important;
+  position: relative;
+
+  &::after {
+    content: '❌';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+    color: #dc3545;
+  }
+}
+
+.bottomBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.versionWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.actionsContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.diffContainer {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 20px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fdfdfd;
+
+  h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+}
+
+.simpleDiffViewer {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.diffHeader {
+  display: flex;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.diffContent {
+  display: flex;
+  min-height: 200px;
+}
+
+.diffColumn {
+  flex: 1;
+  padding: 15px;
+  
+  h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.diffOld {
+  background-color: #ffe6e6;
+  border: 1px solid #ffcdd2;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.diffNew {
+  background-color: #e6ffe6;
+  border: 1px solid #c8e6c9;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+@keyframes shockwaveJump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.03); }
+  50% { transform: scale(0.99); }
+  55% { transform: scale(1.01); }
+  60% { transform: scale(0.99); }
+  100% { transform: scale(1); }
+}
+
+/* Material-UI Table customizations */
+.tableContainer {
+  .MuiTableHead-root {
+    background-color: #f5f5f5;
+  }
+  
+  .MuiTableCell-head {
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+  }
+  
+  .MuiTableRow-root {
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  
+  .MuiTableCell-root {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 16px;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tableHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .searchField {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .headerActions {
+    justify-content: space-between;
+  }
+  
+  .bottomBar {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .actionsContainer {
+    justify-content: center;
+  }
+}

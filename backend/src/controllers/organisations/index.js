@@ -14,6 +14,11 @@ router.post(
 );
 
 router.get(
+  '/',
+  RequestWrapper(OrgController.list)
+);
+
+router.get(
   '/:id',
   validations.byId(),
   ValidateRequestErrors(),

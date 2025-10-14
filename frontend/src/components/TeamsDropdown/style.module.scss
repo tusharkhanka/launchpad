@@ -1,0 +1,101 @@
+.teamContainer {
+  display: flex;
+  align-items: center;
+  flex: 0.15;
+  justify-content: space-between;
+}
+
+.teamLabel {
+  margin-right: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+.dropdownContainer {
+  min-width: 200px;
+}
+
+.select {
+  color: #000000;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  
+  .MuiSelect-icon {
+    color: #000000;
+  }
+  
+  &:before {
+    border-color: transparent;
+  }
+  
+  &:after {
+    border-color: transparent;
+  }
+  
+  &:hover:not(.Mui-disabled):before {
+    border-color: transparent;
+  }
+  
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.selectedTeamDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.selectedTeamName {
+  color: #000000;
+  font-weight: 600;
+  flex: 1;
+}
+
+.selectedRoleTag {
+  font-size: 12px;
+  font-weight: 1000;
+  color: whitesmoke;
+  background-color: #3F51B5;
+  padding: 4px 5px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+.menuItem {
+  padding: 8px 16px;
+}
+
+.teamItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.teamName {
+  font-weight: 500;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.roleTag {
+  font-size: 12px;
+  font-weight: 1000;
+  color: whitesmoke;
+  background-color: #3F51B5;
+  padding: 4px 5px;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+
+.loadingText {
+  margin-left: 8px;
+  color: white;
+}

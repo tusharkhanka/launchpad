@@ -4,9 +4,6 @@ import {
   Menu,
   MenuItem,
   Typography,
-  Select,
-  FormControl,
-  Chip,
   Avatar,
 } from "@material-ui/core";
 import { AccountCircle, ExitToApp } from "@material-ui/icons";
@@ -15,9 +12,6 @@ import styles from "./style.module.scss";
 
 const Profile = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedTeam, setSelectedTeam] = useState(null);
-  const [userRole, setUserRole] = useState("");
-  const [teamsList, setTeamsList] = useState([]);
   const [userDetails, setUserDetails] = useState(null);
   const [imageError, setImageError] = useState(false);
 
@@ -32,11 +26,6 @@ const Profile = () => {
       // userPayload.image = "https://via.placeholder.com/150/1da1f2/ffffff?text=U";
       
       // Convert Google image URL to proxied URL to avoid CORS issues
-      if (userPayload.image && userPayload.image.includes('googleusercontent.com')) {
-        const encodedImageUrl = encodeURIComponent(userPayload.image);
-        userPayload.image = `${process.env.REACT_APP_API_URL || 'http://localhost:3001'}/api/auth/proxy-image?imageUrl=${encodedImageUrl}`;
-      }
-      
       setUserDetails(userPayload);
       setImageError(false); // Reset image error state
     } else {
@@ -46,24 +35,6 @@ const Profile = () => {
         email: "user@example.com"
       });
     }
-    
-    // Mock teams data - replace with actual API call
-    const mockTeams = [
-      { id: 1, name: "Development Team", role: "Developer" },
-      { id: 2, name: "Design Team", role: "Designer" },
-      { id: 3, name: "Marketing Team", role: "Manager" },
-    ];
-    
-    setTeamsList(mockTeams);
-    
-    // Set default team and role
-    const defaultTeam = mockTeams[0];
-    setSelectedTeam(defaultTeam);
-    setUserRole(defaultTeam.role);
-    
-    // Store in localStorage
-    localStorage.setItem("team", JSON.stringify(defaultTeam));
-    localStorage.setItem("user_role", JSON.stringify(defaultTeam.role));
   }, []);
 
   const handleProfileMenuOpen = (event) => {
@@ -79,52 +50,10 @@ const Profile = () => {
     window.location.href = "/login";
   };
 
-  const handleTeamChange = (event) => {
-    const teamName = event.target.value;
-    const team = teamsList.find(t => t.name === teamName);
-    if (team) {
-      setSelectedTeam(team);
-      setUserRole(team.role);
-      localStorage.setItem("team", JSON.stringify(team));
-      localStorage.setItem("user_role", JSON.stringify(team.role));
-    }
-  };
-
   const open = Boolean(anchorEl);
 
   return (
     <div className={styles["profile__container"]}>
-      <div className={styles["profile__team"]}>
-        <Typography variant="body2" className={styles["profile__team-label"]}>
-          Team:
-        </Typography>
-        {teamsList?.length > 0 && (
-          <>
-            <FormControl size="small" className={styles["profile__team-select"]}>
-              <Select
-                value={selectedTeam?.name || "Select a team"}
-                onChange={handleTeamChange}
-                displayEmpty
-                className="profile_team"
-              >
-                {teamsList.map((team) => (
-                  <MenuItem key={team.id} value={team.name}>
-                    {team.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {userRole && (
-              <Chip
-                label={userRole}
-                className={styles["profile__role-tag"]}
-                size="small"
-              />
-            )}
-          </>
-        )}
-      </div>
-
       <IconButton
         edge="end"
         aria-label="account of current user"

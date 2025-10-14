@@ -1,24 +1,33 @@
 const express = require('express');
+const EnvironmentController = require('./environment.controller');
 const ValidateRequestErrors = require('../../utils/validateRequestMiddlewares');
 const RequestWrapper = require('../../utils/requestWrapper');
-const validations = require('./environments.validation');
-const Controller = require('./environments.controller');
+const validations = require('./environment.validation');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
+// Create environment under organisation
 router.post(
-  '/:orgId/environments',
+  '/',
   validations.createUnderOrg(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.createUnderOrg)
+  RequestWrapper(EnvironmentController.create)
 );
 
+// List environments by organisation
 router.get(
-  '/:orgId/environments',
-  validations.listUnderOrg(),
+  '/',
+  validations.listByOrganisation(),
   ValidateRequestErrors(),
-  RequestWrapper(Controller.listUnderOrg)
+  RequestWrapper(EnvironmentController.listByOrganisation)
+);
+
+// Get environment stats for organisation
+router.get(
+  '/stats',
+  validations.getStats(),
+  ValidateRequestErrors(),
+  RequestWrapper(EnvironmentController.getStats)
 );
 
 module.exports = router;
-

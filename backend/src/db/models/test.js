@@ -18,8 +18,7 @@ const test = AppDataSource.define('test', {
   },
   password: {
     type: DataTypes.STRING(100),
-    allowNullL: false,
-    unique: true
+    allowNull: false
   }
 }, {
   tableName: 'Test',

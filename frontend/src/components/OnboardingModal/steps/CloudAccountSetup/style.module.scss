@@ -1,0 +1,83 @@
+@import "scss/variables.scss";
+
+.cloud-account-setup {
+  padding: 16px;
+}
+
+.cloud-account-setup__card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cloud-account-setup__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.cloud-account-setup__icon {
+  font-size: 32px;
+  color: #1da1f2;
+  margin-right: 12px;
+}
+
+.cloud-account-setup__title {
+  font-weight: 600;
+  color: #333;
+}
+
+.cloud-account-setup__description {
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.cloud-account-setup__form {
+  .MuiTextField-root,
+  .MuiFormControl-root {
+    margin-bottom: 16px;
+  }
+}
+
+.cloud-account-setup__input {
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+}
+
+.cloud-account-setup__access-keys {
+  margin-top: 16px;
+}
+
+.cloud-account-setup__access-keys-title {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.cloud-account-setup__access-key-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cloud-account-setup__access-key-field {
+  flex: 1;
+}
+
+.cloud-account-setup__error {
+  margin: 16px 0;
+}
+
+.cloud-account-setup__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.cloud-account-setup__submit {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 600;
+}

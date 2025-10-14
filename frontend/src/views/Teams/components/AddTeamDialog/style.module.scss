@@ -1,0 +1,47 @@
+.dialog {
+  .dialogTitle {
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 24px 24px 16px 24px;
+  }
+
+  .dialogContent {
+    padding: 0 24px 16px 24px;
+  }
+
+  .dialogActions {
+    padding: 16px 24px 24px 24px;
+    gap: 12px;
+  }
+}
+
+.textField {
+  margin-bottom: 16px;
+
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+
+  .MuiInputLabel-outlined {
+    font-weight: 500;
+  }
+}
+
+.errorAlert {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.cancelButton {
+  text-transform: none;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.createButton {
+  text-transform: none;
+  font-weight: 500;
+  padding: 8px 24px;
+  border-radius: 8px;
+}
+

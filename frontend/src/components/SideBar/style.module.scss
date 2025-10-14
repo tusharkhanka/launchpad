@@ -5,20 +5,20 @@
 }
 
 .sidebar__drawer {
-  width: 240px;
+  width: 220px;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .sidebar__drawer--open {
-  width: 240px;
+  width: 0px;
   transition: width 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
 .sidebar__drawer--closed {
   transition: width 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   overflow-x: hidden;
-  width: 57px;
+  width: 50px;
   
   @media (min-width: 600px) {
     width: 73px;
@@ -30,7 +30,7 @@
 }
 
 .sidebar__drawer-paper--open {
-  width: 240px;
+  width: 200px;
   transition: width 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 

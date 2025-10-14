@@ -16,5 +16,26 @@ const Organisation = AppDataSource.define('organisation', {
   tableName: 'organisation',
 });
 
+// Define associations
+Organisation.associate = (models) => {
+  // Organisation has many CloudAccounts
+  Organisation.hasMany(models.CloudAccount, {
+    foreignKey: 'organisation_id',
+    as: 'cloudAccounts'
+  });
+
+  // Organisation has many Environments
+  Organisation.hasMany(models.Environment, {
+    foreignKey: 'org_id',
+    as: 'environments'
+  });
+
+  // Organisation has many Applications
+  Organisation.hasMany(models.Application, {
+    foreignKey: 'organisation_id',
+    as: 'applications'
+  });
+};
+
 module.exports = Organisation;
 

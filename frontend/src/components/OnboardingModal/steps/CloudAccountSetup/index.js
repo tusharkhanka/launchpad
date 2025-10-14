@@ -1,0 +1,266 @@
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { Cloud } from "@material-ui/icons";
+
+import { createCloudAccount } from "services/cloudAccounts";
+import styles from "./style.module.scss";
+
+const CloudAccountSetup = ({ organizationId, onComplete, onBack }) => {
+  const [formData, setFormData] = useState({
+    provider: "aws",
+    account_name: "",
+    account_identifier: "",
+    access_keys: [
+      { key: 'AWS_ACCESS_KEY_ID', value: '' },
+      { key: 'AWS_SECRET_ACCESS_KEY', value: '' },
+      { key: 'AWS_REGION', value: '' }
+    ],
+    metadata: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const providers = [
+    { value: "aws", label: "Amazon Web Services (AWS)" },
+    { value: "gcp", label: "Google Cloud Platform (GCP)" },
+    { value: "azure", label: "Microsoft Azure" },
+    { value: "oracle", label: "Oracle Cloud" },
+  ];
+
+  const getDefaultAccessKeys = (provider) => {
+    switch (provider) {
+      case 'aws':
+        return [
+          { key: 'AWS_ACCESS_KEY_ID', value: '' },
+          { key: 'AWS_SECRET_ACCESS_KEY', value: '' },
+          { key: 'AWS_REGION', value: '' }
+        ];
+      case 'gcp':
+        return [
+          { key: 'GOOGLE_APPLICATION_CREDENTIALS', value: '' },
+          { key: 'GCP_PROJECT_ID', value: '' },
+          { key: 'GCP_REGION', value: '' }
+        ];
+      case 'azure':
+        return [
+          { key: 'AZURE_CLIENT_ID', value: '' },
+          { key: 'AZURE_CLIENT_SECRET', value: '' },
+          { key: 'AZURE_TENANT_ID', value: '' },
+          { key: 'AZURE_SUBSCRIPTION_ID', value: '' }
+        ];
+      case 'oracle':
+        return [
+          { key: 'OCI_USER_ID', value: '' },
+          { key: 'OCI_TENANCY_ID', value: '' },
+          { key: 'OCI_REGION', value: '' },
+          { key: 'OCI_KEY_FILE', value: '' }
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === 'provider') {
+      setFormData(prev => ({
+        ...prev,
+        provider: value,
+        access_keys: getDefaultAccessKeys(value)
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    setError("");
+  };
+
+  const handleAccessKeyChange = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      access_keys: prev.access_keys.map((key, i) => 
+        i === index ? { ...key, [field]: value } : key
+      )
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.provider || !formData.account_name || !formData.account_identifier) {
+      setError("Please fill in all required fields");
+      return;
+    }
+
+    // Validate access keys
+    const hasEmptyKeys = formData.access_keys.some(key => !key.key.trim() || !key.value.trim());
+    if (hasEmptyKeys) {
+      setError("All access key fields must be filled");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const metadata = formData.metadata ? JSON.parse(formData.metadata) : null;
+      console.log("formdata", formData);
+      const response = await createCloudAccount(organizationId, {
+        ...formData,
+        metadata
+      });
+
+      if (response && response.data) {
+        onComplete(response.data);
+      } else {
+        setError("Failed to create cloud account");
+      }
+    } catch (err) {
+      console.error("Error creating cloud account:", err);
+      setError(err.response?.data?.message || "Failed to create cloud account");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Box className={styles["cloud-account-setup"]}>
+      <Card className={styles["cloud-account-setup__card"]}>
+        <CardContent>
+          <Box className={styles["cloud-account-setup__header"]}>
+            <Cloud className={styles["cloud-account-setup__icon"]} />
+            <Typography variant="h5" className={styles["cloud-account-setup__title"]}>
+              Add Cloud Account
+            </Typography>
+          </Box>
+          
+          <Typography variant="body1" className={styles["cloud-account-setup__description"]}>
+            Cloud accounts allow you to connect your cloud provider accounts to Launchpad. 
+            This enables you to manage and deploy environments across different cloud platforms.
+          </Typography>
+
+          <Box className={styles["cloud-account-setup__form"]}>
+            <form onSubmit={handleSubmit}>
+              <FormControl fullWidth className={styles["cloud-account-setup__input"]}>
+                <InputLabel>Cloud Provider *</InputLabel>
+                <Select
+                  name="provider"
+                  value={formData.provider}
+                  onChange={handleInputChange}
+                  required
+                >
+                  {providers.map((provider) => (
+                    <MenuItem key={provider.value} value={provider.value}>
+                      {provider.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <TextField
+                name="account_name"
+                label="Account Name *"
+                value={formData.account_name}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                className={styles["cloud-account-setup__input"]}
+                placeholder="e.g., Production AWS Account"
+              />
+
+              <TextField
+                name="account_identifier"
+                label="Account Identifier *"
+                value={formData.account_identifier}
+                onChange={handleInputChange}
+                fullWidth
+                required
+                className={styles["cloud-account-setup__input"]}
+                placeholder="e.g., AWS Account ID, GCP Project ID"
+              />
+
+              {/* Access Keys Section */}
+              <Box className={styles["cloud-account-setup__access-keys"]}>
+                <Typography variant="subtitle2" className={styles["cloud-account-setup__access-keys-title"]}>
+                  Access Keys *
+                </Typography>
+                {formData.access_keys.map((key, index) => (
+                  <Box key={index} className={styles["cloud-account-setup__access-key-row"]}>
+                    <TextField
+                      label="Key"
+                      value={key.key}
+                      className={styles["cloud-account-setup__access-key-field"]}
+                      InputProps={{
+                        readOnly: true,
+                        style: { backgroundColor: '#f5f5f5' }
+                      }}
+                    />
+                    <TextField
+                      label="Value"
+                      value={key.value}
+                      onChange={(e) => handleAccessKeyChange(index, 'value', e.target.value)}
+                      className={styles["cloud-account-setup__access-key-field"]}
+                      placeholder={`Enter ${key.key}`}
+                      type={key.key.includes('SECRET') || key.key.includes('KEY') ? 'password' : 'text'}
+                    />
+                  </Box>
+                ))}
+              </Box>
+
+              <TextField
+                name="metadata"
+                label="Metadata (JSON)"
+                value={formData.metadata}
+                onChange={handleInputChange}
+                fullWidth
+                multiline
+                rows={3}
+                className={styles["cloud-account-setup__input"]}
+                placeholder='{"region": "us-east-1", "tags": {"environment": "production"}}'
+                helperText="Optional JSON metadata for additional configuration"
+              />
+
+
+              {error && (
+                <Alert severity="error" className={styles["cloud-account-setup__error"]}>
+                  {error}
+                </Alert>
+              )}
+
+              <Box className={styles["cloud-account-setup__actions"]}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={loading}
+                  endIcon={loading ? <CircularProgress size={20} /> : <Cloud />}
+                  className={styles["cloud-account-setup__submit"]}
+                >
+                  {loading ? "Adding..." : "Add Cloud Account"}
+                </Button>
+              </Box>
+            </form>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+};
+
+export default CloudAccountSetup;

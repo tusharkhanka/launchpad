@@ -3,6 +3,7 @@ const Organisation = require('../db/models/organisation');
 const OrganisationDataProvider = {
   create: async (data) => Organisation.create(data),
   findById: async (id) => Organisation.findByPk(id, { raw: true }),
+  findAll: async () => Organisation.findAll({ raw: true }),
   updateById: async (id, payload) => {
     const [affected] = await Organisation.update(payload, { where: { id } });
     return affected;
