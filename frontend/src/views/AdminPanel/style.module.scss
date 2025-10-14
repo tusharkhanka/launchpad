@@ -1,14 +1,107 @@
 @import "scss/variables.scss";
 
-.admin-panel__container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+.admin-panel {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
-.admin-panel__card {
-  background-color: #f5f5f5;
-  padding: 20px;
+.admin-panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+.admin-panel__title-section {
+  flex: 1;
+}
+
+.admin-panel__title {
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  font-size: 2rem;
+}
+
+.admin-panel__subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.admin-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-panel__search {
+  min-width: 300px;
+  
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+}
+
+.admin-panel__add-org {
   border-radius: 8px;
-  margin-top: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: none;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.admin-panel__refresh {
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.admin-panel__error {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.admin-panel__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.admin-panel__loading-text {
+  color: #6b7280;
+}
+
+.admin-panel__content {
+  min-height: 400px;
+}
+
+.admin-panel__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.admin-panel__empty-title {
+  color: #374151;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.admin-panel__empty-subtitle {
+  color: #6b7280;
+}
+
+.admin-panel__organizations {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

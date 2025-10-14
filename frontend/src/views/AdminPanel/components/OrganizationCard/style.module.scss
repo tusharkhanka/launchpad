@@ -1,0 +1,125 @@
+@import "scss/variables.scss";
+
+.organization-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #d1d5db;
+  }
+}
+
+.organization-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.organization-card__info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+}
+
+.organization-card__icon {
+  color: #3b82f6;
+  font-size: 24px;
+}
+
+.organization-card__details {
+  flex: 1;
+}
+
+.organization-card__name {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.organization-card__id {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.organization-card__stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  margin-right: 16px;
+}
+
+.organization-card__stat {
+  color: #6b7280;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.organization-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.organization-card__menu {
+  color: #6b7280;
+  
+  &:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.organization-card__expand {
+  color: #6b7280;
+  
+  &:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.organization-card__content {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.organization-card__resources {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.organization-card__empty {
+  text-align: center;
+  padding: 32px 24px;
+  color: #6b7280;
+}
+
+.organization-card__empty-text {
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  color: #6b7280;
+}
+
+.organization-card__empty-subtitle {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.organization-card__orphaned-envs {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.organization-card__orphaned-title {
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}

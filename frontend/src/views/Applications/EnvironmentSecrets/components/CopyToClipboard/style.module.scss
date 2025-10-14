@@ -1,0 +1,19 @@
+/* CopyToClipboard Component Styles */
+.copyButton {
+  color: #7f8c8d;
+  transition: all 0.3s ease;
+  padding: 4px;
+  margin: 0 4px;
+
+  &:hover {
+    color: #3498db;
+    transform: scale(1.1);
+    background-color: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+

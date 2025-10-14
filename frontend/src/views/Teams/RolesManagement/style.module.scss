@@ -1,0 +1,118 @@
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.headerLeft {
+  flex: 1;
+  min-width: 200px;
+}
+
+.title {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 16px;
+}
+
+.createButton {
+  height: 48px;
+  padding: 0 24px;
+  font-weight: 500;
+  text-transform: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rolesSection {
+  margin-top: 32px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.tableContainer {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.table {
+  .tableHeader {
+    font-weight: 600;
+    color: #1a1a1a;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .tableRow {
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  .tableCell {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px;
+  }
+}
+
+.roleName {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.editButton {
+  color: #1976d2;
+  
+  &:hover {
+    background-color: rgba(25, 118, 210, 0.1);
+  }
+}
+
+.deleteButton {
+  color: #f44336;
+  
+  &:hover {
+    background-color: rgba(244, 67, 54, 0.1);
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+}
+
+.errorAlert {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}

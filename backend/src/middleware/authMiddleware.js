@@ -14,19 +14,38 @@ const isUserAuthenticated = () => {
   return async (req, res, next) => {
     try {
       const token = getToken(req.headers);
-      const session = await userSessionProvider.findByToken(token);
-
-      if (session) {
-        req.user = session.user;
-        return next();
-      } else {
-        return res.status(400).json({
+      
+      if (!token) {
+        return res.status(401).json({
           error: true,
-          message: "Invalid session",
-          statusCode: 400
+          message: "No token provided",
+          statusCode: 401
         });
       }
+
+      const session = await userSessionProvider.findByToken(token);
+
+      if (!session) {
+        return res.status(401).json({
+          error: true,
+          message: "Invalid session",
+          statusCode: 401
+        });
+      }
+
+      // Check if session is expired
+      if (session.expiry && new Date() > new Date(session.expiry)) {
+        return res.status(401).json({
+          error: true,
+          message: "Session expired",
+          statusCode: 401
+        });
+      }
+
+      req.user = session.user;
+      return next();
     } catch (err) {
+      console.error("Auth middleware error:", err);
       return res.status(500).json({
         error: true,
         message: "Internal server error",

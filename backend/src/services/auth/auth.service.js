@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const userProvider = require('../../dataProviders/userProvider');
 const UserSessionDataProvider = require('../../dataProviders/userSessionsProvider');
 const userService = require('../user/user.service');
+const teamService = require('../teams/team.service');
+const roleService = require('../roles/role.service');
 const generateUsernameFromEmail = require('../../utils/generateUsernameFromEmail');
 const { JWT_SECRET } = process.env;
 const config = require('../../utils/environment');
@@ -27,10 +29,16 @@ AuthService.login = async ({ email, password, isSSO }) => {
         if (isSSO) {
             // For Google SSO – password may not be required
             user = await userProvider.create({ username, email, password: null });
+            
+            // Setup default team for all first-time SSO users
+            await AuthService.setupDefaultTeamForUser(user);
         } else {
             if (!password) throw new Error("Password required for normal login");
             const hashedPassword = await bcrypt.hash(password, 10);
             user = await userProvider.create({ username, email, password: hashedPassword });
+            
+            // Setup default team for all first-time users
+            await AuthService.setupDefaultTeamForUser(user);
         }
     } else {
         // 3. If existing user & not SSO → validate password
@@ -67,6 +75,65 @@ AuthService.logout = async (token) => {
     return { message: 'Logged out successfully' };
 };
 
+AuthService.setupDefaultTeamForUser = async (user) => {
+    try {
+        console.log('Setting up default team for user:', user.email);
+        
+        // 1. Check if "Team Launchpad" already exists
+        let defaultTeam = await teamService.findByEmail('team@launchpad.com');
+        
+        if (!defaultTeam) {
+            console.log('Creating default team "Team Launchpad"');
+            // Create the default team
+            defaultTeam = await teamService.create({
+                name: 'Team Launchpad',
+                email: 'team@launchpad.com'
+            });
+            console.log('Default team created:', defaultTeam);
+        } else {
+            console.log('Default team already exists:', defaultTeam);
+        }
+
+        // 2. Determine user role based on email
+        const isAdmin = user.email === 'launchpad_admin@gmail.com';
+        const roleName = isAdmin ? 'ADMIN' : 'MEMBER';
+        
+        // 3. Get or create the role
+        let userRole = await roleService.findByName(roleName);
+        if (!userRole) {
+            console.log(`${roleName} role not found, creating it`);
+            userRole = await roleService.create({ name: roleName });
+            console.log(`${roleName} role created:`, userRole);
+        }
+
+        // 4. Check if user is already in the team
+        const { UserTeamRoleMapping } = require('../../db/models');
+        const existingMapping = await UserTeamRoleMapping.findOne({
+            where: {
+                user_id: user.id,
+                team_id: defaultTeam.id
+            }
+        });
+
+        if (!existingMapping) {
+            console.log(`Adding user to default team with ${roleName} role`);
+            // Add user to team with appropriate role
+            await teamService.addMemberToTeam(defaultTeam.id, {
+                userId: user.id,
+                roleId: userRole.id
+            });
+            console.log(`User added to default team with ${roleName} role`);
+        } else {
+            console.log('User already in default team');
+        }
+
+        console.log('Default team setup completed successfully');
+    } catch (error) {
+        console.error('Error setting up default team for user:', error);
+        // Don't throw error to avoid breaking login flow
+    }
+};
+
 AuthService.googleOAuth = async (token) => {
     try {
         const verifyToken = await client.verifyIdToken({
@@ -86,13 +153,23 @@ AuthService.googleOAuth = async (token) => {
         let user = await userProvider.findByEmail(email);
         console.log("user", user);
         if (!user) {
-            const userId = await this.register({
-                email,
-                name: `${given_name} ${family_name}`,
-                password: `${given_name}_${family_name}_${email}`,
-            });
-            user = await userService.getById(userId?.id);
-
+            try {
+                const username = generateUsernameFromEmail(email);
+                console.log("Creating SSO user with username:", username);
+                const hashedPassword = await bcrypt.hash(`${given_name}_${family_name}_${email}`, 10);
+                user = await userProvider.create({ 
+                    username, 
+                    email, 
+                    password: hashedPassword 
+                });
+                console.log("createduser", user);
+                
+                // Setup default team for first-time SSO users
+                await AuthService.setupDefaultTeamForUser(user);
+            } catch (error) {
+                console.error("Error creating SSO user:", error);
+                throw error;
+            }
         }
         const jwtToken = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
         const expiresAt = new Date(Date.now() + 60 * 60 * 1000);

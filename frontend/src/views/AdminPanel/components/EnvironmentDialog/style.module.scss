@@ -1,0 +1,48 @@
+@import "scss/variables.scss";
+
+.dialog__title {
+  font-weight: 600;
+  color: #1f2937;
+  padding-bottom: 16px;
+}
+
+.dialog__content {
+  padding-top: 8px;
+}
+
+.dialog__error {
+  margin-bottom: 16px;
+}
+
+.dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dialog__input {
+  margin-bottom: 0;
+}
+
+.dialog__delete-content {
+  padding: 16px 0;
+  
+  p {
+    margin-bottom: 12px;
+    color: #374151;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  strong {
+    color: #1f2937;
+    font-weight: 600;
+  }
+}
+
+.dialog__actions {
+  padding: 16px 24px;
+  gap: 8px;
+}

@@ -9,10 +9,10 @@ import Typography from "@material-ui/core/Typography";
 
 import styles from "./style.module.scss";
 
-
 import Logo from "assets/img/Launchpad_logo_2.png";
 
 import Profile from "components/Profile";
+import TeamsDropdown from "components/TeamsDropdown";
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -50,6 +50,11 @@ class Navbar extends React.Component {
                     {/* Search component can be added here later */}
                   </div>
                 </div>
+                
+                <div className={styles["navbar__teams"]}>
+                  <TeamsDropdown />
+                </div>
+                
                 <div className={styles["navbar__profile"]}>
                   <Profile />
                 </div>

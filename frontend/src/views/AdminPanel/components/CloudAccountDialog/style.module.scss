@@ -1,0 +1,86 @@
+@import "scss/variables.scss";
+
+.dialog__title {
+  font-weight: 600;
+  color: #1f2937;
+  padding-bottom: 16px;
+}
+
+.dialog__content {
+  padding-top: 8px;
+}
+
+.dialog__error {
+  margin-bottom: 16px;
+}
+
+.dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dialog__input {
+  margin-bottom: 0;
+}
+
+.dialog__delete-content {
+  padding: 16px 0;
+  
+  p {
+    margin-bottom: 12px;
+    color: #374151;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  strong {
+    color: #1f2937;
+    font-weight: 600;
+  }
+}
+
+.dialog__access-keys-section {
+  margin-top: 16px;
+}
+
+.dialog__access-keys-title {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.dialog__access-key-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dialog__access-key-field {
+  flex: 1;
+}
+
+.dialog__test-connection-section {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.dialog__test-connection-button {
+  margin-bottom: 12px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.dialog__connection-result {
+  margin-top: 8px;
+}
+
+.dialog__actions {
+  padding: 16px 24px;
+  gap: 8px;
+}

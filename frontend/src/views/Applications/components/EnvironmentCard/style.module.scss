@@ -1,0 +1,35 @@
+.environmentCard {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #1976d2;
+  }
+
+  &__details {
+    margin-bottom: 16px;
+    
+    p {
+      margin: 4px 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+}
+

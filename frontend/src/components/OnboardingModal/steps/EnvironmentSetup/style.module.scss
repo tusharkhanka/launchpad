@@ -1,0 +1,81 @@
+@import "scss/variables.scss";
+
+.environment-setup {
+  padding: 16px;
+}
+
+.environment-setup__card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.environment-setup__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.environment-setup__icon {
+  font-size: 32px;
+  color: #1da1f2;
+  margin-right: 12px;
+}
+
+.environment-setup__title {
+  font-weight: 600;
+  color: #333;
+}
+
+.environment-setup__description {
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.environment-setup__success {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #e8f5e8;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.environment-setup__success-icon {
+  color: #4caf50;
+  margin-right: 8px;
+}
+
+.environment-setup__success-text {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.environment-setup__form {
+  .MuiTextField-root {
+    margin-bottom: 16px;
+  }
+}
+
+.environment-setup__input {
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+}
+
+.environment-setup__error {
+  margin: 16px 0;
+}
+
+.environment-setup__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.environment-setup__submit {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 600;
+}

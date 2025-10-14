@@ -1,0 +1,58 @@
+@import "scss/variables.scss";
+
+.organization-setup {
+  padding: 16px;
+}
+
+.organization-setup__card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.organization-setup__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.organization-setup__icon {
+  font-size: 32px;
+  color: #1da1f2;
+  margin-right: 12px;
+}
+
+.organization-setup__title {
+  font-weight: 600;
+  color: #333;
+}
+
+.organization-setup__description {
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.organization-setup__form {
+  .MuiTextField-root {
+    margin-bottom: 16px;
+  }
+}
+
+.organization-setup__input {
+  .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+}
+
+.organization-setup__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.organization-setup__submit {
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 600;
+}

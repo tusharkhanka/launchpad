@@ -19,5 +19,17 @@ router.get(
     RequestWrapper(UserController.getAllUsers)
 );
 
+router.get(
+    '/search',
+    ValidateRequestErrors(),
+    RequestWrapper(UserController.searchUsersByEmail)
+);
+
+router.get(
+    '/teams-and-roles',
+    ValidateRequestErrors(),
+    RequestWrapper(UserController.getUserTeamsAndRoles)
+);
+
 
 module.exports = router;

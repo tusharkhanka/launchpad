@@ -1,0 +1,30 @@
+.dialog {
+  &__content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__actions {
+    padding: 16px 24px;
+    gap: 8px;
+  }
+
+  &__loading {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 10px;
+  }
+
+  &__noEnvironments {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+  }
+}
+

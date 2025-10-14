@@ -10,6 +10,12 @@ const Authcontroller = {};
 Authcontroller.register = async (req, res) => {
     try {
         const response = await AuthService.register(req.body);
+        
+        // Set user on request for audit trail tracking
+        if (response) {
+            req.user = response;
+        }
+
         return responseWrapper.successResponse(
             res,
             200,
@@ -29,6 +35,12 @@ Authcontroller.register = async (req, res) => {
 Authcontroller.login = async (req, res) => {
     try {
         const response = await AuthService.login(req.body);
+        
+        // Set user on request for audit trail tracking
+        if (response.user) {
+            req.user = response.user;
+        }
+
         return responseWrapper.successResponse(
             res,
             200,
@@ -77,6 +89,14 @@ Authcontroller.sso = async (req, res) => {
     try {
         const { token } = req.body;
         const response = await AuthService.googleOAuth(token);
+
+        // Set user on request for audit trail tracking
+        // Extract user info from the service response
+        const userProvider = require('../../dataProviders/userProvider');
+        const user = await userProvider.findByEmail(response.email);
+        if (user) {
+            req.user = user;
+        }
 
         return responseWrapper.successResponse(
             res,
