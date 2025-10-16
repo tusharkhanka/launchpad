@@ -1,4 +1,4 @@
-.PHONY: up down restart ps logs verify verify-proxy migrate build rebuild
+.PHONY: up down restart ps logs logs-stop logs-combined logs-backend logs-frontend logs-mysql logs-proxy clean verify verify-proxy migrate build rebuild
 
 # Bring the full stack up (MySQL, backend, frontend, reverse proxy)
 up:
@@ -47,3 +47,38 @@ verify-proxy:
 	curl -s -i http://localhost/health | head -n 10 && echo && \
 	curl -s -i http://localhost/ | head -n 10
 
+# Stop enhanced logging (started by install.sh)
+logs-stop:
+	@if [ -f logs/pids.txt ]; then \
+		kill -TERM $$(cat logs/pids.txt) 2>/dev/null || true; \
+		rm -f logs/pids.txt; \
+		echo "Enhanced logging stopped."; \
+	else \
+		echo "No enhanced logging processes found."; \
+	fi
+
+# View combined logs from files (tail -f)
+logs-combined:
+	tail -f logs/combined.log
+
+# View backend logs from files (tail -f)
+logs-backend:
+	tail -f logs/backend.log
+
+# View frontend logs from files (tail -f)
+logs-frontend:
+	tail -f logs/frontend.log
+
+# View MySQL logs from files (tail -f)
+logs-mysql:
+	tail -f logs/mysql.log
+
+# View reverse proxy logs from files (tail -f)
+logs-proxy:
+	tail -f logs/reverse-proxy.log
+
+# Complete cleanup: stop logging, containers, images, volumes, and networks
+clean: logs-stop
+	docker compose down --volumes --rmi all --remove-orphans
+	@if [ -d logs ]; then rm -rf logs && echo "Logs directory cleaned."; fi
+	@if [ -f .env ]; then rm -f .env && echo "Environment file removed."; fi

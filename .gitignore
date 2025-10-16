@@ -1,2 +1,6 @@
 spec/*
 .augment/rules/*
+smoke*
+.env
+installation*.txt
+logs/
