@@ -5,6 +5,6 @@ COPY backend/package*.json ./
 # Install only production dependencies in the runtime image
 RUN npm ci --omit=dev
 COPY backend/. .
+RUN chmod +x entrypoint.sh
 EXPOSE 9000
-CMD ["npm", "start"]
-
+ENTRYPOINT ["./entrypoint.sh"]

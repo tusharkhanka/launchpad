@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Guided installer for Launchpad self-hosted deployment
-set -u
+# set -u
 
 START_TS=$(date +%Y-%m-%d-%H-%M-%S)
 INSTALL_REPORT="installation-report.txt"
@@ -113,16 +113,24 @@ autogen_secret() {
 create_env_file() {
   local path="$1" mode="$2" jwt google db_user db_pass db_name db_root caddy_domain caddy_email
   # JWT
-  while true; do
-    prompt jwt "Enter JWT_SECRET (>=32 chars; leave empty to auto-generate)" ""
-    if [[ -z "$jwt" ]]; then jwt=$(autogen_secret); fi
-    if ((${#jwt} >= 32)); then break; else echo "JWT_SECRET too short."; fi
-  done
+  if [[ "$mode" == "development" ]]; then
+    jwt=$(autogen_secret)
+  else
+    while true; do
+      prompt jwt "Enter JWT_SECRET (>=32 chars; leave empty to auto-generate)" ""
+      if [[ -z "$jwt" ]]; then jwt=$(autogen_secret); fi
+      if ((${#jwt} >= 32)); then break; else echo "JWT_SECRET too short."; fi
+    done
+  fi
   # Google client id
-  while true; do
-    prompt google "Enter GOOGLE_CLIENT_ID (e.g., 12345-xxxxx.apps.googleusercontent.com)" ""
-    if validate_google_client_id "$google"; then break; else echo "Invalid GOOGLE_CLIENT_ID format."; fi
-  done
+  if [[ "$mode" == "development" ]]; then
+    google="1009159787467-3s148d8n45p6feqelum3omq1ojatdjok.apps.googleusercontent.com"
+  else
+    while true; do
+      prompt google "Enter GOOGLE_CLIENT_ID (e.g., 12345-xxxxx.apps.googleusercontent.com)" ""
+      if validate_google_client_id "$google"; then break; else echo "Invalid GOOGLE_CLIENT_ID format."; fi
+    done
+  fi
   prompt db_user  "DB username" "launchpad"
   prompt db_pass  "DB password" "launchpad" true
   prompt db_name  "DB name"     "launchpad"
@@ -245,6 +253,26 @@ if [[ $ST -ne 0 ]]; then
   exit 1
 fi
 
+# Setup enhanced logging
+log "Setting up enhanced logging..."
+mkdir -p logs
+
+# Start background logging for all services
+docker compose logs -f -t --tail=0 mysql > "logs/mysql.log" 2>&1 &
+echo $! > logs/pids.txt
+docker compose logs -f -t --tail=0 backend > "logs/backend.log" 2>&1 &
+echo $! >> logs/pids.txt
+docker compose logs -f -t --tail=0 frontend > "logs/frontend.log" 2>&1 &
+echo $! >> logs/pids.txt
+docker compose logs -f -t --tail=0 reverse-proxy > "logs/reverse-proxy.log" 2>&1 &
+echo $! >> logs/pids.txt
+
+# Create combined log
+tail -q -f "logs/mysql.log" "logs/backend.log" "logs/frontend.log" "logs/reverse-proxy.log" > "logs/combined.log" 2>&1 &
+echo $! >> logs/pids.txt
+
+log "Enhanced logging setup complete."
+
 log "Installation SUCCESSFUL. Access URLs:"
 if [[ "$MODE" == "production" ]]; then
   DOMAIN=$(grep '^CADDY_DOMAIN=' .env | cut -d= -f2)
@@ -256,6 +284,13 @@ else
   log " - Proxy: http://localhost/ (if using reverse-proxy)"
 fi
 
+log "Enhanced logging is active. Use these commands to view logs:"
+log " - All services: tail -f logs/combined.log"
+log " - Backend only: tail -f logs/backend.log"
+log " - Frontend only: tail -f logs/frontend.log"
+log " - MySQL only: tail -f logs/mysql.log"
+log " - Reverse proxy only: tail -f logs/reverse-proxy.log"
+log " - Stop logging: kill \$(cat logs/pids.txt)"
+
 log "A summary has been recorded in $INSTALL_REPORT"
 exit 0
-
